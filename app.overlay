@@ -37,7 +37,7 @@
 			compatible = "solomon,ssd1351";
 			reg = <0>;
 			mipi-mode = "MIPI_DBI_MODE_SPI_4WIRE";
-			mipi-max-frequency = <40000000>;
+			mipi-max-frequency = <20000000>;
 			width = <128>;
 			height = <128>;
 			display-offset = <0>;

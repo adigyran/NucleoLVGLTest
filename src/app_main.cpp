@@ -85,8 +85,8 @@ int app_cpp_run(void)
 		return 0;
 	}
  
-	start_fpu_demo();
-	start_msgq_demo();
+	// start_fpu_demo();
+	// start_msgq_demo();
 	lvgl_demo_init();
 	start_led_blinker(&led0_ctx, &led0_thread, led0_stack, K_THREAD_STACK_SIZEOF(led0_stack),
 			  "led0_100ms");
