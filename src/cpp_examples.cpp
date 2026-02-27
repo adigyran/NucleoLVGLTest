@@ -2,8 +2,6 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
  
-#define CPP_EXAMPLE_LOG_EVERY_N_TICKS 12
- 
 LOG_MODULE_REGISTER(cpp_examples, LOG_LEVEL_INF);
  
 namespace {
@@ -43,8 +41,7 @@ void cpp_examples_tick(uint32_t tick)
 		k_busy_wait(200);
 	}
  
-	if ((tick % CPP_EXAMPLE_LOG_EVERY_N_TICKS) == 0U) {
-		LOG_INF("C++ sample avg=%.2f elapsed=%lldms", static_cast<double>(mean),
-			static_cast<long long>(elapsed));
-	}
+	ARG_UNUSED(tick);
+	ARG_UNUSED(mean);
+	ARG_UNUSED(elapsed);
 }

@@ -5,8 +5,6 @@
  
 #define MSGQ_STACK_SIZE 1024
 #define MSGQ_THREAD_PRIO 7
-#define MSGQ_LOG_EVERY_N 8
- 
 LOG_MODULE_REGISTER(msgq_demo, LOG_LEVEL_INF);
  
 K_MSGQ_DEFINE(cpp_msgq, sizeof(uint32_t), 16, 4);
@@ -38,11 +36,7 @@ static void consumer(void *p1, void *p2, void *p3)
 	ARG_UNUSED(p3);
  
 	while (true) {
-		if (k_msgq_get(&cpp_msgq, &value, K_FOREVER) == 0) {
-			if ((value % MSGQ_LOG_EVERY_N) == 0U) {
-				LOG_INF("msgq value=%u", value);
-			}
-		}
+		(void)k_msgq_get(&cpp_msgq, &value, K_FOREVER);
 	}
 }
  
