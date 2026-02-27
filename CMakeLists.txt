@@ -14,6 +14,16 @@ target_sources(app PRIVATE
     src/monitor/top_collector.cpp
     src/monitor/top_renderer.cpp
 )
+
+# Подключаем сгенерированные SquareLine Studio 1.6.x файлы (экспортируются в ui/).
+# filelist.txt создаётся автоматически при каждом экспорте из редактора.
+set(SLS_FILELIST ${CMAKE_CURRENT_SOURCE_DIR}/ui/filelist.txt)
+if(EXISTS ${SLS_FILELIST})
+    file(STRINGS ${SLS_FILELIST} SLS_SOURCES)
+    list(TRANSFORM SLS_SOURCES PREPEND ${CMAKE_CURRENT_SOURCE_DIR}/ui/)
+    target_sources(app PRIVATE ${SLS_SOURCES})
+    target_include_directories(app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
+endif()
  
 # Build a minimal loadable extension sample as build/hello_world_ext.llext.
 add_llext_target(hello_world_ext

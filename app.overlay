@@ -37,7 +37,7 @@
 			compatible = "solomon,ssd1351";
 			reg = <0>;
 			mipi-mode = "MIPI_DBI_MODE_SPI_4WIRE";
-			mipi-max-frequency = <12000000>;
+			mipi-max-frequency = <40000000>;
 			width = <128>;
 			height = <128>;
 			display-offset = <0>;
@@ -54,13 +54,15 @@
 	};
 };
 
-/* SPI1 DMA только TX: дисплей SSD1351 однонаправленный (write-only).
- * DMAMUX1 канал 5, request 38 (SPI1_TX) → DMA1 stream 5.
- * RX канал не нужен — освобождаем stream 6 для ADC или других нужд.
+/* SPI1 использует interrupt-driven режим (без DMA): D-cache включён,
+ * и все буферы (включая стековые в драйвере инициализации дисплея)
+ * работают без ограничений. DMA каналы оставлены в overlay для будущего
+ * использования (ADC DMA, или если потребуется SPI DMA с nocache буферами).
  */
 &arduino_spi {
-	dmas = <&dmamux1 5 38 STM32_DMA_PERIPH_TX>;
-	dma-names = "tx";
+	dmas = <&dmamux1 5 38 STM32_DMA_PERIPH_TX>,
+	       <&dmamux1 6 37 STM32_DMA_PERIPH_RX>;
+	dma-names = "tx", "rx";
 };
 
 &dma1 {
