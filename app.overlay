@@ -14,7 +14,32 @@
 };
  
 / {
+	chosen {
+		zephyr,display = &oled;
+	};
+ 
 	aliases {
 		led2 = &red_led;
+	};
+};
+ 
+#include <zephyr/dt-bindings/gpio/arduino-header-r3.h>
+ 
+&arduino_spi {
+	oled: sh1106@0 {
+		compatible = "sinowealth,sh1106";
+		reg = <0>;
+		spi-max-frequency = <8000000>;
+		width = <128>;
+		height = <128>;
+		segment-offset = <0>;
+		page-offset = <0>;
+		display-offset = <0>;
+		multiplex-ratio = <127>;
+		segment-remap;
+		com-invdir;
+		prechargep = <0x22>;
+		data-cmd-gpios = <&arduino_header ARDUINO_HEADER_R3_D9 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&arduino_header ARDUINO_HEADER_R3_D8 GPIO_ACTIVE_LOW>;
 	};
 };

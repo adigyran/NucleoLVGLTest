@@ -6,6 +6,7 @@
 #include "cpp_examples.hpp"
 #include "fpu_demo.hpp"
 #include "msgq_demo.hpp"
+#include "oled_demo.hpp"
 #include "rtc_service.hpp"
  
 #define STATUS_PERIOD_MS 500
@@ -84,6 +85,7 @@ int app_cpp_run(void)
  
 	start_fpu_demo();
 	start_msgq_demo();
+	oled_demo_init();
 	start_led_blinker(&led0_ctx, &led0_thread, led0_stack, K_THREAD_STACK_SIZEOF(led0_stack),
 			  "led0_100ms");
 #if DT_NODE_EXISTS(DT_ALIAS(led1))
@@ -103,6 +105,7 @@ int app_cpp_run(void)
 	while (true) {
 		++ticks;
 		cpp_examples_tick(ticks);
+		oled_demo_tick(ticks);
  
 		k_msleep(STATUS_PERIOD_MS);
 	}
