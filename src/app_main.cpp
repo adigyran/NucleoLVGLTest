@@ -5,11 +5,12 @@
 #include "app_cpp.h"
 #include "cpp_examples.hpp"
 #include "fpu_demo.hpp"
+#include "lvgl_demo.hpp"
 #include "msgq_demo.hpp"
-#include "oled_demo.hpp"
 #include "rtc_service.hpp"
  
 #define STATUS_PERIOD_MS 500
+#define LVGL_PERIOD_MS 16
 #define LED0_BLINK_MS 100
 #define LED1_BLINK_MS 250
 #define LED2_BLINK_MS 500
@@ -78,6 +79,7 @@ static void start_led_blinker(struct led_ctx *ctx, struct k_thread *thread, k_th
 int app_cpp_run(void)
 {
 	uint32_t ticks = 0;
+	uint32_t status_ticks = 0;
  
 	if (!rtc_service_init()) {
 		return 0;
@@ -85,7 +87,7 @@ int app_cpp_run(void)
  
 	start_fpu_demo();
 	start_msgq_demo();
-	oled_demo_init();
+	lvgl_demo_init();
 	start_led_blinker(&led0_ctx, &led0_thread, led0_stack, K_THREAD_STACK_SIZEOF(led0_stack),
 			  "led0_100ms");
 #if DT_NODE_EXISTS(DT_ALIAS(led1))
@@ -103,10 +105,14 @@ int app_cpp_run(void)
 	LOG_INF("C++ demos started");
  
 	while (true) {
-		++ticks;
-		cpp_examples_tick(ticks);
-		oled_demo_tick(ticks);
+		ticks += LVGL_PERIOD_MS;
+		status_ticks += LVGL_PERIOD_MS;
+		lvgl_demo_tick(ticks);
+		if (status_ticks >= STATUS_PERIOD_MS) {
+			status_ticks = 0;
+			cpp_examples_tick(ticks / STATUS_PERIOD_MS);
+		}
  
-		k_msleep(STATUS_PERIOD_MS);
+		k_msleep(LVGL_PERIOD_MS);
 	}
 }

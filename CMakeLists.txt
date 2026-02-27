@@ -6,7 +6,7 @@ target_sources(app PRIVATE
     src/app_main.cpp
     src/rtc_service.cpp
     src/rtc_shell.cpp
-    src/oled_demo.cpp
+    src/lvgl_demo.cpp
     src/fpu_demo.cpp
     src/msgq_demo.cpp
     src/cpp_examples.cpp
